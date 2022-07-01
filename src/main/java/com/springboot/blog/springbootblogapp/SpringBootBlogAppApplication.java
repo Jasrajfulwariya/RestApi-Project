@@ -1,5 +1,6 @@
 package com.springboot.blog.springbootblogapp;
 
+import com.springboot.blog.springbootblogapp.entity.Post;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
