@@ -1,7 +1,11 @@
 package com.springboot.blog.springbootblogapp.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -20,11 +24,24 @@ public class Post {
     @Column(name="content",nullable = false)
     private String content;
 
-    public Post(Long id, String title, String description, String content) {
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Comment> comments;
+
+    public Post(Long id, String title, String description, String content, Set<Comment> comments) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.content = content;
+        this.comments = comments;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public Post() {

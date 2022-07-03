@@ -4,6 +4,7 @@ import com.springboot.blog.springbootblogapp.payload.PostDto;
 import com.springboot.blog.springbootblogapp.service.PostService;
 import com.springboot.blog.springbootblogapp.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 public class PostController {
 
     @Autowired
+    @Qualifier("postServiceImpl")
     private PostService postService;
 
     @RequestMapping(method = RequestMethod.POST)
