@@ -1,7 +1,9 @@
 package com.springboot.blog.springbootblogapp.service.impl;
 
+import com.springboot.blog.springbootblogapp.entity.Comment;
 import com.springboot.blog.springbootblogapp.entity.Post;
 import com.springboot.blog.springbootblogapp.exception.ResourceNotFoundException;
+import com.springboot.blog.springbootblogapp.payload.CommentDto;
 import com.springboot.blog.springbootblogapp.payload.PostDto;
 import com.springboot.blog.springbootblogapp.repository.PostRepository;
 import com.springboot.blog.springbootblogapp.service.PostService;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -77,6 +80,15 @@ public class PostServiceImpl implements PostService {
         postDto.setContent(post.getContent());
         postDto.setDescription(post.getDescription());
         postDto.setTitle(post.getTitle());
+        postDto.setComments(post.getComments().stream().map((x)->convertCommentToCommentDto(x)).collect(Collectors.toSet()));
         return postDto;
+    }
+    private CommentDto convertCommentToCommentDto(Comment dto)
+    {
+        CommentDto comment=new CommentDto();
+        comment.setBody(dto.getBody());
+        comment.setEmail(dto.getEmail());
+        comment.setId(dto.getId());
+        return comment;
     }
 }
