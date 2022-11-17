@@ -7,6 +7,8 @@ import com.springboot.blog.springbootblogapp.payload.CommentDto;
 import com.springboot.blog.springbootblogapp.payload.PostDto;
 import com.springboot.blog.springbootblogapp.repository.PostRepository;
 import com.springboot.blog.springbootblogapp.service.PostService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,13 +21,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
-
+    private static final Logger logger= LoggerFactory.getLogger(PostServiceImpl.class);
     @Autowired
     private PostRepository postRepository;
 
 
     @Override
     public PostDto createPost(PostDto postDto) {
+        logger.info("creating post {} in DAO ",postDto);
         Post post=convertPostDtoToPost(postDto);
         Post newPost=postRepository.save(post);
         return convertPostToPostDto(newPost);
@@ -33,6 +36,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getAllPosts(int pageNo,int pageSize,String sortBy,String sortDir) {
+        logger.info("getting all post for pageNo {} from DAO",pageNo);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         //  not support asc and desc
         // Pageable pageable=PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
@@ -46,12 +50,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostById(long id) {
+        logger.info("getting post for postID {} from DAO",id);
         Post post=postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",String.valueOf(id)));
         return convertPostToPostDto(post);
     }
 
     @Override
     public PostDto updatePost(PostDto postDto, long id) {
+        logger.info("update post for postID {} from DAO",id);
         Post post =postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","ID",id+""));
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
@@ -61,6 +67,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePostById(long id) {
+        logger.info("delete post for postID {} form DAO",id);
         Post post =postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","ID",id+""));
         postRepository.delete(post);
     }
